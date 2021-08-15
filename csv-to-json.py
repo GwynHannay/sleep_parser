@@ -4,7 +4,7 @@ def conversion(csv_path, json_path):
 	json_array = []
 
 	# read CSV file
-	with open(csv_path, encording='utf-8') as csvf:
+	with open(csv_path, encoding='utf-8') as csvf:
 		# load CSV file using csv library's dictionary reader
 		csv_reader = csv.DictReader(csvf)
 
