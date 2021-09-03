@@ -31,7 +31,7 @@ def conversion(csv_path, json_path):
         json_string = json.dumps(json_array, indent=4)
         jsonf.write(json_string)
 
-csv_path = r'csv/2021-08-10_sleep-export.csv'
-json_path = r'json/2021-08-10_sleep-export.json'
+csv_path = r'sleep-as-android/csv/2021-08-10_sleep-export.csv'
+json_path = r'sleep-as-android/json/2021-08-10_sleep-export.json'
 
 conversion(csv_path, json_path)
