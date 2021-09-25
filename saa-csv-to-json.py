@@ -16,9 +16,13 @@ def conversion(csv_path, json_path):
                 headers = []
                 i = 0
                 for val in row:
+                    if val[0].isdigit():
+                        val = 'act_{}'.format(val)
                     if val == 'Event':
-                        val = 'Event {}'.format(i)
+                        val = 'event_{}'.format(i)
                         i = i + 1
+
+                    val = val.replace(':', '_').lower()
                     headers.append(val)
             else:
                 cols = row
@@ -26,12 +30,15 @@ def conversion(csv_path, json_path):
                 dictionary = dict(zip_it)
                 json_array.append(dictionary)
 
+    result = [json.dumps(record) for record in json_array]
+
     # convert Python json_array to JSON String and write to file
     with open(json_path, 'w', encoding='utf-8') as jsonf:
-        json_string = json.dumps(json_array, indent=4)
-        jsonf.write(json_string)
+        for d in result:
+            jsonf.write(''.join(d))
+            jsonf.write('\n')
 
 csv_path = r'sleep-as-android/csv/2021-08-10_sleep-export.csv'
-json_path = r'sleep-as-android/json/2021-08-10_sleep-export.json'
+json_path = r'sleep-as-android/json/2021-09-26_sleep-export.json'
 
 conversion(csv_path, json_path)
