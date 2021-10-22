@@ -1,4 +1,4 @@
-import csv, json
+import csv, json, data_functions as df
 
 # Step 1: Open CSV and read
 # Step 2: Select first row
@@ -51,3 +51,54 @@ import csv, json
 #       IF type = ALARM_STARTED: event type, timestamp
 #       IF type = ALARM_DISMISSED: event type, timestamp
 # IF field = any other fields?
+
+def conversion(csv_path):
+    first_pass = []
+    json_array = []
+
+    # read CSV file
+    with open(csv_path, encoding='utf-8') as csvf:
+        # load CSV file using csv library's dictionary reader
+        csv_reader = csv.reader(csvf)
+
+        cols = []
+        # convert each row into Python Dict
+        for row in csv_reader:
+            # add this Python Dict to JSON array
+            if row[0] == 'Id':
+                headers = []
+                i = 0
+                for val in row:
+                    if val == 'Event':
+                        val = val + ' {}'.format(i)
+                        i = i + 1
+
+                    headers.append(val)
+            else:
+                cols = row
+                zip_it = zip(headers, cols)
+                dictionary = dict(zip_it)
+                first_pass.append(dictionary)
+
+    i = 0
+    for record in first_pass:
+        for key in record:
+            val = record[key]
+            #print("{}: {}".format(key, val))
+
+            header = df.process_header(key)
+            print(header)
+
+            if header.startswith('event'):
+                event = df.process_event(val)
+                print(event)
+
+            #field = df.process_detail(header, val)
+            #print(field)
+            #break
+            
+        break
+
+csv_path = r'sleep-as-android/csv/2021-08-10_sleep-export.csv'
+
+conversion(csv_path)
