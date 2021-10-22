@@ -52,12 +52,12 @@ import csv, json, data_functions as df
 #       IF type = ALARM_DISMISSED: event type, timestamp
 # IF field = any other fields?
 
-def conversion(csv_path):
+def conversion(csv_file):
     first_pass = []
     json_array = []
 
     # read CSV file
-    with open(csv_path, encoding='utf-8') as csvf:
+    with open(csv_file, encoding='utf-8') as csvf:
         # load CSV file using csv library's dictionary reader
         csv_reader = csv.reader(csvf)
 
@@ -99,6 +99,6 @@ def conversion(csv_path):
             
         break
 
-csv_path = r'sleep-as-android/csv/2021-08-10_sleep-export.csv'
+csv_file = r'sleep-export.csv'
 
-conversion(csv_path)
+conversion(csv_file)
