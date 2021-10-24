@@ -16,6 +16,7 @@ def process_header(header):
     
     return header
 
+
 def process_dates(header, detail):
     if header in ('tracking_start', 'tracking_end', 'alarm_scheduled'):
         datetime_value = datetime.strptime(detail, '%d. %m. %Y %H:%M')
@@ -24,6 +25,13 @@ def process_dates(header, detail):
         datetime_value = datetime.fromtimestamp(int(detail)/1000)
 
     return datetime_value
+
+
+def process_numbers(header, detail):
+    detail = float(detail)
+
+    return detail
+    
 
 def process_event(event):
     event_parts = event.split('-')
@@ -34,7 +42,10 @@ def process_event(event):
     event_time = timestamp.strftime('%Y-%m-%d %H:%M')
 
     if len(event_parts) > 2:
-        event_value = event_parts[2]
+        if event_type == 'HR':
+            event_value = float(event_parts[2])
+        else:
+            event_value = event_parts[2]
     else:
         event_value = None
     
@@ -45,6 +56,7 @@ def process_event(event):
     }
 
     return event_dict
+
 
 def process_actigraphy(time, value, start_time):
     act_time_part = datetime.strptime(time, '%H:%M').time()

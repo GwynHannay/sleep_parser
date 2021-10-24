@@ -81,13 +81,13 @@ def conversion(csv_file):
                 first_pass.append(dictionary)
 
     json_array = []
+    events = []
+    actigraphies = []
     for record in first_pass:
-        events = []
-        actigraphies = []
+        headers = []
+        details = []
 
         for key in record:
-            headers = []
-            details = []
             val = record[key]
 
             header = df.process_header(key)
@@ -99,8 +99,11 @@ def conversion(csv_file):
                     id = datetime_value
                 else:
                     val = datetime.strftime(datetime_value, '%Y-%m-%d %H:%M')
+            
+            elif header in ('tracking_hours', 'rating'):
+                val = df.process_numbers(header, val)
 
-            if header.startswith('event'):
+            elif header.startswith('event'):
                 event = df.process_event(val)
                 header = 'events'
                 events.append(event)
@@ -121,12 +124,13 @@ def conversion(csv_file):
         break
 
     result = [json.dumps(record) for record in json_array]
+    print(result)
 
     # convert Python json_array to JSON String and write to file
-    with open(r'sleep-export.json', 'w', encoding='utf-8') as jsonf:
-        for d in result:
-            jsonf.write(''.join(d))
-            jsonf.write('\n')
+    #with open(r'sleep-export.json', 'w', encoding='utf-8') as jsonf:
+        #for d in result:
+            #jsonf.write(''.join(d))
+            #jsonf.write('\n')
 
 csv_file = r'sleep-export.csv'
 
