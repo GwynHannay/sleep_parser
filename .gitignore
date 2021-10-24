@@ -130,6 +130,7 @@ dmypy.json
 
 ### Working files
 *.csv
+*.json
 
 ### Personal Stuff
 csv/

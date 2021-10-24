@@ -1,4 +1,5 @@
 import csv, json, data_functions as df
+from datetime import datetime
 
 # Step 1: Open CSV and read
 # Step 2: Select first row
@@ -28,7 +29,7 @@ import csv, json, data_functions as df
 # IF field = Snore: ?
 # IF field = Noise: ?
 # IF field = Cycles: ?
-# IF field = DeepSleep: ? Is this a percent?
+# IF field = DeepSleep: ? Is this a percent?l
 # IF field = LenAdjust: ?
 # IF field = Geo: ?
 # IF field = digit-type: actigraphy, learn about it and how to display
@@ -54,7 +55,6 @@ import csv, json, data_functions as df
 
 def conversion(csv_file):
     first_pass = []
-    json_array = []
 
     # read CSV file
     with open(csv_file, encoding='utf-8') as csvf:
@@ -80,24 +80,53 @@ def conversion(csv_file):
                 dictionary = dict(zip_it)
                 first_pass.append(dictionary)
 
-    i = 0
+    json_array = []
     for record in first_pass:
+        events = []
+        actigraphies = []
+
         for key in record:
+            headers = []
+            details = []
             val = record[key]
-            #print("{}: {}".format(key, val))
 
             header = df.process_header(key)
-            print(header)
+            
+            if header in ('id', 'tracking_start', 'tracking_end', 'alarm_scheduled'):
+                datetime_value = df.process_dates(header, val)
+
+                if header == 'id':
+                    id = datetime_value
+                else:
+                    val = datetime.strftime(datetime_value, '%Y-%m-%d %H:%M')
 
             if header.startswith('event'):
                 event = df.process_event(val)
-                print(event)
-
-            #field = df.process_detail(header, val)
-            #print(field)
-            #break
+                header = 'events'
+                events.append(event)
+                val = {header: events}
             
+            elif header[0].isdigit():
+                actigraphy = df.process_actigraphy(header, val, id)
+                header = 'actigraphy'
+                actigraphies.append(actigraphy)
+                val = {header: actigraphies}
+            
+            headers.append(header)
+            details.append(val)
+        
+        zip_it = zip(headers, details)
+        json_array.append(dict(zip_it))
+
         break
+
+    result = [json.dumps(record) for record in json_array]
+
+    # convert Python json_array to JSON String and write to file
+    with open(r'sleep-export.json', 'w', encoding='utf-8') as jsonf:
+        for d in result:
+            jsonf.write(''.join(d))
+            jsonf.write('\n')
 
 csv_file = r'sleep-export.csv'
 

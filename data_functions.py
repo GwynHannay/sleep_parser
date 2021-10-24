@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def process_header(header):
     header = header.lower()
@@ -16,12 +16,14 @@ def process_header(header):
     
     return header
 
-def process_detail(header, detail):
-
+def process_dates(header, detail):
     if header in ('tracking_start', 'tracking_end', 'alarm_scheduled'):
-        detail = datetime.strptime(detail, '%d. %m. %Y %H:%M').strftime('%Y-%m-%d %H:%M')
+        datetime_value = datetime.strptime(detail, '%d. %m. %Y %H:%M')
     
-    return detail
+    if header == 'id':
+        datetime_value = datetime.fromtimestamp(int(detail)/1000)
+
+    return datetime_value
 
 def process_event(event):
     event_parts = event.split('-')
@@ -43,3 +45,21 @@ def process_event(event):
     }
 
     return event_dict
+
+def process_actigraphy(time, value, start_time):
+    act_time_part = datetime.strptime(time, '%H:%M').time()
+    start_time_part = start_time.time()
+    start_time_date = start_time.date()
+    next_day_date = start_time_date + timedelta(days = 1)
+
+    if act_time_part > start_time_part:
+        act_datetime = datetime.combine(start_time_date, act_time_part)
+    else:
+        act_datetime = datetime.combine(next_day_date, act_time_part)
+
+    act_dict = {
+        'actigraphic_time': act_datetime.strftime('%Y-%m-%d %H:%M'),
+        'actigraphic_value': value
+    }
+    
+    return act_dict
