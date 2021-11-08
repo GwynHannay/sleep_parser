@@ -133,6 +133,7 @@ dmypy.json
 *.json
 
 ### Personal Stuff
+archive/
+cpap/
 csv/
 json/
-cpap/
