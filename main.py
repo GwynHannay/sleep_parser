@@ -55,13 +55,13 @@ def conversion(csv_file):
                 event = df.process_event(val)
                 header = 'events'
                 events.append(event)
-                val = {header: events}
+                val = events
             
             elif header[0].isdigit():
                 actigraphy = df.process_actigraphy(header, val, id)
                 header = 'actigraphy'
                 actigraphies.append(actigraphy)
-                val = {header: actigraphies}
+                val = actigraphies
             
             headers.append(header)
             details.append(val)
