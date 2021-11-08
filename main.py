@@ -72,14 +72,19 @@ def conversion(csv_file):
         break
 
     result = [json.dumps(record) for record in json_array]
-    #print(result)
+    print(result)
 
     # convert Python json_array to JSON String and write to file
-    with open(r'sleep-export.json', 'w', encoding='utf-8') as jsonf:
-        for d in result:
-            jsonf.write(''.join(d))
-            jsonf.write('\n')
+    #with open(r'sleep-export.json', 'w', encoding='utf-8') as jsonf:
+        #for d in result:
+            #jsonf.write(''.join(d))
+            #jsonf.write('\n')
 
-csv_file = r'sleep-export.csv'
+if __name__ == "__main__":
+    # set the name of our CSV file to be transformed
+    csv_file = r'sleep-export.csv'
 
-conversion(csv_file)
+    try:
+        conversion(csv_file)
+    except Exception as e:
+        Exception("Error sending file to conversion method: {}, {}.".format(csv_file, e))
