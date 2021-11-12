@@ -84,6 +84,7 @@ if __name__ == "__main__":
     # set the name of our CSV file to be transformed
     csv_file = r'sleep-export.csv'
 
+    # pass the filename to the function that will convert it
     try:
         conversion(csv_file)
     except Exception as e:

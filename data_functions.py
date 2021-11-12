@@ -1,18 +1,27 @@
 from datetime import datetime, timedelta
 
+
+"""
+    Process a header sent from Sleep as Android CSV
+"""
 def process_header(header):
+    # convert all headers to lowercase
     header = header.lower()
 
-    if header == 'tz':
-        header = 'timezone'
-    elif header == 'from':
-        header = 'tracking_start'
-    elif header == 'to':
-        header = 'tracking_end'
-    elif header == 'sched':
-        header = 'alarm_scheduled'
-    elif header == 'hours':
-        header = 'tracking_hours'
+    # rename some of the headings to be a bit more descriptive
+    try:
+        if header == 'tz':
+            header = 'timezone'
+        elif header == 'from':
+            header = 'tracking_start'
+        elif header == 'to':
+            header = 'tracking_end'
+        elif header == 'sched':
+            header = 'alarm_scheduled'
+        elif header == 'hours':
+            header = 'tracking_hours'
+    except Exception as e:
+        raise Exception("An error occurred processing header '{}': {}".format(header, e))
     
     return header
 
