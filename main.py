@@ -1,4 +1,5 @@
-import csv, json, data_functions as df
+import csv, json
+from helpers import csv_parser as cps, data_functions as df
 from datetime import datetime
 
 def conversion(csv_file):
@@ -9,24 +10,14 @@ def conversion(csv_file):
         # load CSV file using csv library's dictionary reader
         csv_reader = csv.reader(csvf)
 
-        cols = []
         # convert each row into Python Dict
         for row in csv_reader:
             # add this Python Dict to JSON array
             if row[0] == 'Id':
                 headers = []
-                i = 0
-                for val in row:
-                    if val == 'Event':
-                        val = val + ' {}'.format(i)
-                        i = i + 1
-
-                    headers.append(val)
+                headers = cps.csv_headers(row)
             else:
-                cols = row
-                zip_it = zip(headers, cols)
-                dictionary = dict(zip_it)
-                first_pass.append(dictionary)
+                first_pass.append(cps.combine_record(headers, row))
 
     json_array = []
     events = []
