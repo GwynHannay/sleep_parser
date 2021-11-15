@@ -55,14 +55,19 @@ def process_event(event):
             event_value = float(event_parts[2])
         else:
             event_value = event_parts[2]
+        
+        event_dict = {
+            'event_type': event_type,
+            'event_time': event_time,
+            'event_value': event_value
+        }
     else:
         event_value = None
     
-    event_dict = {
-        'event_type': event_type,
-        'event_time': event_time,
-        'event_value': event_value
-    }
+        event_dict = {
+            'event_type': event_type,
+            'event_time': event_time
+        }
 
     return event_dict
 
