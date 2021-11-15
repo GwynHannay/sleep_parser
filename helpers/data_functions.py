@@ -43,12 +43,12 @@ def process_numbers(header, detail):
     
 
 def process_event(event):
-    event_parts = event.split('-')
+    event_parts = event.split('-', 2)
 
     event_type = event_parts[0]
 
     timestamp = datetime.fromtimestamp(int(event_parts[1])/1000)
-    event_time = timestamp.strftime('%Y-%m-%d %H:%M:%S')
+    event_time = timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
 
     if len(event_parts) > 2:
         if event_type == 'HR':
