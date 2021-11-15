@@ -48,7 +48,7 @@ def process_event(event):
     event_type = event_parts[0]
 
     timestamp = datetime.fromtimestamp(int(event_parts[1])/1000)
-    event_time = timestamp.strftime('%Y-%m-%d %H:%M')
+    event_time = timestamp.strftime('%Y-%m-%d %H:%M:%S')
 
     if len(event_parts) > 2:
         if event_type == 'HR':

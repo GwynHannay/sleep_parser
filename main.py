@@ -1,6 +1,7 @@
 import csv, json
 from helpers import csv_parser as cps, data_functions as df
 from datetime import datetime
+from collections import defaultdict
 
 def conversion(csv_file):
     first_pass = []
@@ -18,13 +19,15 @@ def conversion(csv_file):
                 headers = cps.csv_headers(row)
             else:
                 first_pass.append(cps.combine_record(headers, row))
-
+    
+    i = 0
     json_array = []
-    events = []
-    actigraphies = []
+    records = defaultdict(list)
     for record in first_pass:
         headers = []
         details = []
+        events = []
+        actigraphies = []
 
         for key in record:
             val = record[key]
@@ -39,7 +42,7 @@ def conversion(csv_file):
                 else:
                     val = datetime.strftime(datetime_value, '%Y-%m-%d %H:%M')
             
-            elif header in ('tracking_hours', 'rating'):
+            elif header in ('tracking_hours'):
                 val = df.process_numbers(header, val)
 
             elif header.startswith('event'):
@@ -56,20 +59,28 @@ def conversion(csv_file):
             
             headers.append(header)
             details.append(val)
+            #records[header].append(val)
         
         zip_it = zip(headers, details)
-        json_array.append(dict(zip_it))
+        #print(dict(zip_it))
+        item = dict(zip_it)
+        json_array.append(item)
+        print("goat")
+        i = i + 1
+        print(i)
+        if i == 30:
+            #print(records)
+            break
 
-        break
+    #print(json_array)
+        #break
 
-    result = [json.dumps(record) for record in json_array]
-    print(result)
+    result = json.dumps(json_array)
+    #print(result)
 
     # convert Python json_array to JSON String and write to file
-    #with open(r'sleep-export.json', 'w', encoding='utf-8') as jsonf:
-        #for d in result:
-            #jsonf.write(''.join(d))
-            #jsonf.write('\n')
+    with open(r'sleep-export.json', 'w', encoding='utf-8') as jsonf:
+        jsonf.write(result)
 
 if __name__ == "__main__":
     # set the name of our CSV file to be transformed
