@@ -6,20 +6,23 @@ from collections import defaultdict
 def conversion(csv_file):
     first_pass = []
 
-    # read CSV file
+    # load CSV file
     with open(csv_file, encoding='utf-8') as csvf:
-        # load CSV file using csv library's dictionary reader
         csv_reader = csv.reader(csvf)
 
-        # convert each row into Python Dict
+        # each row is either a header row or a values row
+        # if this is a header row, store it in a new array
+        # if this is a values row, combine it with the previous row's headers
         for row in csv_reader:
-            # add this Python Dict to JSON array
             if row[0] == 'Id':
                 headers = []
                 headers = cps.csv_headers(row)
             else:
                 first_pass.append(cps.combine_record(headers, row))
     
+    # now that we have a dictionary of headers and values
+    # let's identify each part and convert it into
+    # something much more useable
     i = 0
     json_array = []
     records = defaultdict(list)
@@ -84,7 +87,7 @@ def conversion(csv_file):
 
 if __name__ == "__main__":
     # set the name of our CSV file to be transformed
-    csv_file = r'sleep-export.csv'
+    csv_file = r'sleep-as-android/csv/sleep-export.csv'
 
     # pass the filename to the function that will convert it
     try:
