@@ -1,24 +1,24 @@
 from datetime import datetime, timedelta
 
 
-def process_header(header):
+def process_header(header: str) -> str:
     """[summary]
 
     Parameters
     ----------
-    header : [type]
+    header : str
         [description]
 
     Returns
     -------
-    [type]
+    str
         [description]
 
     Raises
     ------
     Exception
         [description]
-    """    
+    """
     # convert all headers to lowercase
     header = header.lower()
 
@@ -55,12 +55,11 @@ def process_dates(header, detail):
     -------
     [type]
         [description]
-    """    
-    if header in ('tracking_start', 'tracking_end', 'alarm_scheduled'):
-        datetime_value = datetime.strptime(detail, '%d. %m. %Y %H:%M')
-
+    """
     if header == 'id':
         datetime_value = datetime.fromtimestamp(int(detail)/1000)
+    else:
+        datetime_value = datetime.strptime(detail, '%d. %m. %Y %H:%M')
 
     return datetime_value
 
@@ -79,7 +78,7 @@ def process_numbers(header, detail):
     -------
     [type]
         [description]
-    """    
+    """
     detail = float(detail)
 
     return detail
@@ -97,7 +96,7 @@ def process_event(event):
     -------
     [type]
         [description]
-    """    
+    """
     event_parts = event.split('-', 2)
 
     event_type = event_parts[0]
@@ -143,7 +142,7 @@ def process_actigraphy(time, value, start_time):
     -------
     [type]
         [description]
-    """    
+    """
     act_time_part = datetime.strptime(time, '%H:%M').time()
     start_time_part = start_time.time()
     start_time_date = start_time.date()

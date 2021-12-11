@@ -8,7 +8,7 @@ sys.path.append(parentdir)
 
 def test_header():
     """[summary]
-    """    
+    """
     assert df.process_header('Id') == 'id'
     assert df.process_header('Tz') == 'timezone'
     assert df.process_header('From') == 'tracking_start'

@@ -27,8 +27,8 @@ def conversion(csv_file: str):
                 headers = []
                 headers = cps.csv_headers(row)
             else:
-                # type: ignore [unbound]
-                first_pass.append(cps.combine_record(headers, row)) # type: ignore
+                first_pass.append(cps.combine_record(
+                    headers, row))  # type: ignore
 
     # now that we have a dictionary of headers and values
     # let's identify each part and convert it into
