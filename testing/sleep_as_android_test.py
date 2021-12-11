@@ -1,14 +1,14 @@
-import os, sys
+from utils import data_functions as df
+import os
+import sys
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
-from helpers import data_functions as df
 
-"""
-    Test header functions in data_functions
-"""
 def test_header():
+    """[summary]
+    """    
     assert df.process_header('Id') == 'id'
     assert df.process_header('Tz') == 'timezone'
     assert df.process_header('From') == 'tracking_start'
@@ -26,5 +26,5 @@ def test_header():
     assert df.process_header('Geo') == 'geo'
     assert df.process_header('19:54') == '19:54'
 
-#def test_dates():
+# def test_dates():
     #assert df.process_dates('tracking_start', '09. 08. 2021 19:49') == '2021-08-09 19:49'

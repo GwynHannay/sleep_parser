@@ -1,6 +1,6 @@
 import csv
 import json
-from helpers import csv_parser as cps, data_functions as df
+from utils import csv_parser as cps, data_functions as df
 from datetime import datetime
 from collections import defaultdict
 
@@ -35,7 +35,6 @@ def conversion(csv_file: str):
     # something much more useable
     i = 0
     json_array = []
-    records = defaultdict(list)
     for record in first_pass:
         headers = []
         details = []
