@@ -1,9 +1,18 @@
-import csv, json
+import csv
+import json
 from helpers import csv_parser as cps, data_functions as df
 from datetime import datetime
 from collections import defaultdict
 
-def conversion(csv_file):
+
+def conversion(csv_file: str):
+    """[summary]
+
+    Parameters
+    ----------
+    csv_file : str
+        [description]
+    """
     first_pass = []
 
     # load CSV file
@@ -18,8 +27,9 @@ def conversion(csv_file):
                 headers = []
                 headers = cps.csv_headers(row)
             else:
-                first_pass.append(cps.combine_record(headers, row))
-    
+                # type: ignore [unbound]
+                first_pass.append(cps.combine_record(headers, row)) # type: ignore
+
     # now that we have a dictionary of headers and values
     # let's identify each part and convert it into
     # something much more useable
@@ -34,9 +44,10 @@ def conversion(csv_file):
 
         for key in record:
             val = record[key]
+            id = 0
 
             header = df.process_header(key)
-            
+
             if header in ('id', 'tracking_start', 'tracking_end', 'alarm_scheduled'):
                 datetime_value = df.process_dates(header, val)
 
@@ -44,7 +55,7 @@ def conversion(csv_file):
                     id = datetime_value
                 else:
                     val = datetime.strftime(datetime_value, '%Y-%m-%d %H:%M')
-            
+
             elif header in ('tracking_hours'):
                 val = df.process_numbers(header, val)
 
@@ -53,39 +64,42 @@ def conversion(csv_file):
                 header = 'events'
                 events.append(event)
                 val = events
-            
+
             elif header[0].isdigit():
                 actigraphy = df.process_actigraphy(header, val, id)
                 header = 'actigraphy'
                 actigraphies.append(actigraphy)
                 val = actigraphies
-            
+
             headers.append(header)
             details.append(val)
-            #records[header].append(val)
-        
+            # records[header].append(val)
+
         zip_it = zip(headers, details)
-        #print(dict(zip_it))
+        # print(dict(zip_it))
         item = dict(zip_it)
         json_array.append(item)
         print("goat")
         i = i + 1
         print(i)
         if i == 30:
-            #print(records)
+            # print(records)
             break
 
-    #print(json_array)
-        #break
+    # print(json_array)
+        # break
 
     result = json.dumps(json_array)
-    #print(result)
+    # print(result)
 
     # convert Python json_array to JSON String and write to file
     with open(r'sleep-export.json', 'w', encoding='utf-8') as jsonf:
         jsonf.write(result)
 
+
 if __name__ == "__main__":
+    """[summary]
+    """
     # set the name of our CSV file to be transformed
     csv_file = r'sleep-as-android/csv/sleep-export.csv'
 
@@ -93,4 +107,5 @@ if __name__ == "__main__":
     try:
         conversion(csv_file)
     except Exception as e:
-        Exception("Error sending file to conversion method: {}, {}.".format(csv_file, e))
+        Exception(
+            "Error sending file to conversion method: {}, {}.".format(csv_file, e))

@@ -1,5 +1,17 @@
 
 def csv_headers(headers):
+    """[summary]
+
+    Parameters
+    ----------
+    headers : [type]
+        [description]
+
+    Returns
+    -------
+    [type]
+        [description]
+    """    
     processed = []
     i = 0
     for header in headers:
@@ -13,6 +25,20 @@ def csv_headers(headers):
 
 
 def combine_record(headers, row):
+    """[summary]
+
+    Parameters
+    ----------
+    headers : [type]
+        [description]
+    row : [type]
+        [description]
+
+    Returns
+    -------
+    [type]
+        [description]
+    """    
     zip_it = zip(headers, row)
     record = dict(zip_it)
 
