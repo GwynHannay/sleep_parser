@@ -2,16 +2,15 @@ import csv
 import json
 from utils import csv_parser as cps, data_functions as df
 from datetime import datetime
-from collections import defaultdict
 
 
 def conversion(csv_file: str):
-    """[summary]
+    """Converts and transforms a CSV file from the Sleep as Android app into a JSON file.
 
     Parameters
     ----------
     csv_file : str
-        [description]
+        Name / location of the CSV file to be processed.
     """
     first_pass = []
 
@@ -34,6 +33,7 @@ def conversion(csv_file: str):
     # let's identify each part and convert it into
     # something much more useable
     i = 0
+    id = 0
     json_array = []
     for record in first_pass:
         headers = []
@@ -43,10 +43,10 @@ def conversion(csv_file: str):
 
         for key in record:
             val = record[key]
-            id = 0
 
             header = df.process_header(key)
 
+            # these headers contain datetimes in various forms, so we want to standardise them
             if header in ('id', 'tracking_start', 'tracking_end', 'alarm_scheduled'):
                 datetime_value = df.process_dates(header, val)
 
@@ -56,7 +56,7 @@ def conversion(csv_file: str):
                     val = datetime.strftime(datetime_value, '%Y-%m-%d %H:%M')
 
             elif header in ('tracking_hours'):
-                val = df.process_numbers(header, val)
+                val = df.process_numbers(val)
 
             elif header.startswith('event'):
                 event = df.process_event(val)

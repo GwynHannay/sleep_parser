@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 
 def process_header(header: str) -> str:
-    """[summary]
+    """Converts all headers to lowercase and makes them a bit more descriptive.
 
     Parameters
     ----------
@@ -19,10 +19,9 @@ def process_header(header: str) -> str:
     Exception
         [description]
     """
-    # convert all headers to lowercase
+
     header = header.lower()
 
-    # rename some of the headings to be a bit more descriptive
     try:
         if header == 'tz':
             header = 'timezone'
@@ -33,7 +32,7 @@ def process_header(header: str) -> str:
         elif header == 'sched':
             header = 'alarm_scheduled'
         elif header == 'hours':
-            header = 'tracking_hours'
+            header = 'hours_tracked'
     except Exception as e:
         raise Exception(
             "An error occurred processing header '{}': {}".format(header, e))
@@ -41,21 +40,21 @@ def process_header(header: str) -> str:
     return header
 
 
-def process_dates(header, detail):
+def process_dates(header: str, detail: str) -> datetime:
     """[summary]
 
     Parameters
     ----------
-    header : [type]
+    header : str
         [description]
-    detail : [type]
+    detail : str
         [description]
 
     Returns
     -------
-    [type]
+    datetime
         [description]
-    """
+    """    
     if header == 'id':
         datetime_value = datetime.fromtimestamp(int(detail)/1000)
     else:
@@ -64,7 +63,7 @@ def process_dates(header, detail):
     return datetime_value
 
 
-def process_numbers(header, detail):
+def process_numbers(detail: str) -> float:
     """[summary]
 
     Parameters
@@ -79,9 +78,9 @@ def process_numbers(header, detail):
     [type]
         [description]
     """
-    detail = float(detail)
+    value = float(detail)
 
-    return detail
+    return value
 
 
 def process_event(event):
