@@ -40,7 +40,7 @@ def process_header(header: str) -> str:
     return header
 
 
-def process_dates(header: str, detail: str) -> datetime:
+def process_dates(detail: str, datatype: str) -> datetime:
     """[summary]
 
     Parameters
@@ -54,8 +54,8 @@ def process_dates(header: str, detail: str) -> datetime:
     -------
     datetime
         [description]
-    """    
-    if header == 'id':
+    """
+    if datatype == 'unix timestamp':
         datetime_value = datetime.fromtimestamp(int(detail)/1000)
     else:
         datetime_value = datetime.strptime(detail, '%d. %m. %Y %H:%M')

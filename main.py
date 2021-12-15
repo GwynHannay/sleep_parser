@@ -1,6 +1,6 @@
 import csv
 import json
-from utils import csv_parser as cps, data_functions as df
+from utils import csv_parser as cps
 from datetime import datetime
 
 
@@ -42,58 +42,60 @@ def conversion(csv_file: str):
         actigraphies = []
 
         for key in record:
-            val = record[key]
+            cps.saa_field_parser(key, record[key])
 
-            header = df.process_header(key)
+    #         val = record[key]
 
-            # these headers contain datetimes in various forms, so we want to standardise them
-            if header in ('id', 'tracking_start', 'tracking_end', 'alarm_scheduled'):
-                datetime_value = df.process_dates(header, val)
+    #         header = df.process_header(key)
 
-                if header == 'id':
-                    id = datetime_value
-                else:
-                    val = datetime.strftime(datetime_value, '%Y-%m-%d %H:%M')
+    #         # these headers contain datetimes in various forms, so we want to standardise them
+    #         if header in ('id', 'tracking_start', 'tracking_end', 'alarm_scheduled'):
+    #             datetime_value = df.process_dates(header, val)
 
-            elif header in ('tracking_hours'):
-                val = df.process_numbers(val)
+    #             if header == 'id':
+    #                 id = datetime_value
+    #             else:
+    #                 val = datetime.strftime(datetime_value, '%Y-%m-%d %H:%M')
 
-            elif header.startswith('event'):
-                event = df.process_event(val)
-                header = 'events'
-                events.append(event)
-                val = events
+    #         elif header in ('tracking_hours'):
+    #             val = df.process_numbers(val)
 
-            elif header[0].isdigit():
-                actigraphy = df.process_actigraphy(header, val, id)
-                header = 'actigraphy'
-                actigraphies.append(actigraphy)
-                val = actigraphies
+    #         elif header.startswith('event'):
+    #             event = df.process_event(val)
+    #             header = 'events'
+    #             events.append(event)
+    #             val = events
 
-            headers.append(header)
-            details.append(val)
-            # records[header].append(val)
+    #         elif header[0].isdigit():
+    #             actigraphy = df.process_actigraphy(header, val, id)
+    #             header = 'actigraphy'
+    #             actigraphies.append(actigraphy)
+    #             val = actigraphies
 
-        zip_it = zip(headers, details)
-        # print(dict(zip_it))
-        item = dict(zip_it)
-        json_array.append(item)
-        print("goat")
-        i = i + 1
-        print(i)
-        if i == 30:
-            # print(records)
-            break
+    #         headers.append(header)
+    #         details.append(val)
+    #         # records[header].append(val)
 
-    # print(json_array)
-        # break
+    #     zip_it = zip(headers, details)
+    #     # print(dict(zip_it))
+    #     item = dict(zip_it)
+    #     json_array.append(item)
+    #     print("goat")
+    #     i = i + 1
+    #     print(i)
+    #     if i == 30:
+    #         # print(records)
+    #         break
 
-    result = json.dumps(json_array)
-    # print(result)
+    # # print(json_array)
+    #     # break
 
-    # convert Python json_array to JSON String and write to file
-    with open(r'sleep-export.json', 'w', encoding='utf-8') as jsonf:
-        jsonf.write(result)
+    # result = json.dumps(json_array)
+    # # print(result)
+
+    # # convert Python json_array to JSON String and write to file
+    # with open(r'sleep-export.json', 'w', encoding='utf-8') as jsonf:
+    #     jsonf.write(result)
 
 
 if __name__ == "__main__":
