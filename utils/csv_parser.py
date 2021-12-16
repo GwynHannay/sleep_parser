@@ -16,8 +16,7 @@ def csv_headers(headers) -> list[str]:
     [type]
         [description]
     """
-    processed = []
-    i = 0
+    processed, i = [], 0
     for header in headers:
         if header == 'Event':
             header = header + ' {}'.format(i)
@@ -49,17 +48,38 @@ def combine_record(headers, row) -> dict[str, str]:
     return record
 
 
-def saa_field_parser(header, value):
-    if header.startswith('Event'):
-        datatype = get_instructions('Event')
+def saa_field_parser(record):
+    headers, entries, actigraphies, events = [], [], [], []
 
-    elif header[0].isdigit():
-        datatype = get_instructions('Actigraphy')
+    for key in record:
+        header = key
+        value = record[key]
 
-    else:
-        datatype = get_instructions(header)
+        if header.startswith('Event'):
+            datatype = get_instructions('Event')
+            result = follow_instructions(header, value, datatype)
+            events.append(result[1])
 
-    entry = follow_instructions(header, value, datatype)
+        elif header[0].isdigit():
+            datatype = get_instructions('Actigraphy')
+            result = follow_instructions(header, value, datatype)
+            actigraphies.append(result[1])
+
+        else:
+            datatype = get_instructions(header)
+            result = follow_instructions(header, value, datatype)
+            headers.append(result[0])
+            entries.append(result[1])
+
+    if len(actigraphies) > 0:
+        headers.append('actigraphy')
+        entries.append(actigraphies)
+    
+    if len(events) > 0:
+        headers.append('events')
+        entries.append(events)
+
+    entry = combine_record(headers, entries)
 
     return entry
 
@@ -104,3 +124,9 @@ def follow_instructions(header, value, datatype):
             entry = (field_name, event)
 
     return entry
+
+
+def build_records(records):
+    json_string = df.process_array(records)
+
+    return json_string

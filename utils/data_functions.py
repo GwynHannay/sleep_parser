@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta
 from utils import globals
 
@@ -135,3 +136,9 @@ def process_actigraphy(time, value, start_time):
     }
 
     return act_dict
+
+
+def process_array(records):
+    json_string = json.dumps(records)
+
+    return json_string
