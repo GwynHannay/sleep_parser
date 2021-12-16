@@ -1,46 +1,19 @@
 from datetime import datetime, timedelta
+from utils import globals
+
+globals.init()
 
 
-def process_header(header: str) -> str:
-    """Converts all headers to lowercase and makes them a bit more descriptive.
+def process_pk(key: str) -> int:
+    datetime_value = datetime.fromtimestamp(int(key)/1000)
 
-    Parameters
-    ----------
-    header : str
-        [description]
+    globals.start_time = datetime_value
 
-    Returns
-    -------
-    str
-        [description]
-
-    Raises
-    ------
-    Exception
-        [description]
-    """
-
-    header = header.lower()
-
-    try:
-        if header == 'tz':
-            header = 'timezone'
-        elif header == 'from':
-            header = 'tracking_start'
-        elif header == 'to':
-            header = 'tracking_end'
-        elif header == 'sched':
-            header = 'alarm_scheduled'
-        elif header == 'hours':
-            header = 'hours_tracked'
-    except Exception as e:
-        raise Exception(
-            "An error occurred processing header '{}': {}".format(header, e))
-
-    return header
+    value = process_integer(key)
+    return value
 
 
-def process_dates(detail: str, datatype: str) -> datetime:
+def process_dates(detail: str) -> str:
     """[summary]
 
     Parameters
@@ -55,15 +28,13 @@ def process_dates(detail: str, datatype: str) -> datetime:
     datetime
         [description]
     """
-    if datatype == 'unix timestamp':
-        datetime_value = datetime.fromtimestamp(int(detail)/1000)
-    else:
-        datetime_value = datetime.strptime(detail, '%d. %m. %Y %H:%M')
+    datetime_value = datetime.strptime(detail, '%d. %m. %Y %H:%M')
+    datetime_string = datetime.strftime(datetime_value, '%Y-%m-%d %H:%M')
 
-    return datetime_value
+    return datetime_string
 
 
-def process_numbers(detail: str) -> float:
+def process_float(detail: str) -> float:
     """[summary]
 
     Parameters
@@ -79,6 +50,12 @@ def process_numbers(detail: str) -> float:
         [description]
     """
     value = float(detail)
+
+    return value
+
+
+def process_integer(detail: str) -> int:
+    value = int(detail)
 
     return value
 

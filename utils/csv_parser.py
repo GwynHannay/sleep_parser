@@ -1,76 +1,6 @@
-from utils import data_functions as df
-
-
-saa_fields = {
-    'Id': {
-        'name': 'id',
-        'type': 'unix timestamp'
-    },
-    'Tz': {
-        'name': 'timezone',
-        'type': 'string'
-    },
-    'From': {
-        'name': 'tracking_start',
-        'type': 'datetime'
-    },
-    'To': {
-        'name': 'tracking_end',
-        'type': 'datetime'
-    },
-    'Sched': {
-        'name': 'alarm_scheduled',
-        'type': 'datetime'
-    },
-    'Hours': {
-        'name': 'hours_tracked',
-        'type': 'float'
-    },
-    'Rating': {
-        'name': 'rating',
-        'type': 'float'
-    },
-    'Comment': {
-        'name': 'comment',
-        'type': 'string'
-    },
-    'Framerate': {
-        'name': 'framerate',
-        'type': 'integer'
-    },
-    'Snore': {
-        'name': 'snore',
-        'type': 'integer'
-    },
-    'Noise': {
-        'name': 'noise',
-        'type': 'float'
-    },
-    'Cycles': {
-        'name': 'cycles',
-        'type': 'integer'
-    },
-    'DeepSleep': {
-        'name': 'deepsleep',
-        'type': 'float'
-    },
-    'LenAdjust': {
-        'name': 'lenadjust',
-        'type': 'integer'
-    },
-    'Geo': {
-        'name': 'geo',
-        'type': 'string'
-    },
-    'Actigraphy': {
-        'name': 'actigraphy',
-        'type': 'array'
-    },
-    'Event': {
-        'name': 'events',
-        'type': 'array'
-    }
-}
+from datetime import datetime
+import json
+from utils import data_functions as df, globals
 
 
 def csv_headers(headers) -> list[str]:
@@ -120,26 +50,57 @@ def combine_record(headers, row) -> dict[str, str]:
 
 
 def saa_field_parser(header, value):
-    if header.startswith('event'):
+    if header.startswith('Event'):
         datatype = get_instructions('Event')
+
     elif header[0].isdigit():
         datatype = get_instructions('Actigraphy')
+
     else:
         datatype = get_instructions(header)
-    
-    follow_instructions(header, value, datatype)
+
+    entry = follow_instructions(header, value, datatype)
+
+    return entry
 
 
 def get_instructions(header) -> dict:
-    instruction = saa_fields[header]
+    instruction = globals.saa_fields[header]
 
     return instruction
 
 
 def follow_instructions(header, value, datatype):
-    header = datatype['name']
-    
-    if datatype['type'] in ('datetime', 'unix timestamp'):
-        dt_value = df.process_dates(value, datatype['type'])
+    entry = ()
+    field_name = datatype['name']
+    d_type = datatype['type']
 
-    print("header: {}, value: {}".format(header, dt_value))
+    if d_type == 'pk':
+        pk_value = df.process_pk(value)
+        entry = (field_name, pk_value)
+
+    elif d_type == 'datetime':
+        dt_value = df.process_dates(value)
+        entry = (field_name, dt_value)
+
+    elif d_type == 'float':
+        f_value = df.process_float(value)
+        entry = (field_name, f_value)
+
+    elif d_type == 'integer':
+        i_value = df.process_integer(value)
+        entry = (field_name, i_value)
+
+    elif d_type == 'string':
+        entry = (field_name, value)
+
+    elif d_type == 'array':
+        if field_name == 'actigraphy':
+            act = df.process_actigraphy(header, value, globals.start_time)
+            entry = (field_name, act)
+
+        elif field_name == 'events':
+            event = df.process_event(value)
+            entry = (field_name, event)
+
+    return entry

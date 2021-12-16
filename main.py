@@ -37,65 +37,37 @@ def conversion(csv_file: str):
     json_array = []
     for record in first_pass:
         headers = []
-        details = []
+        entries = []
         events = []
         actigraphies = []
 
         for key in record:
-            cps.saa_field_parser(key, record[key])
+            result = cps.saa_field_parser(key, record[key])
+            
+            field_name = result[0]
+            entry = result[1]
 
-    #         val = record[key]
+            if field_name == 'actigraphy':
+                actigraphies.append(entry)
+            elif field_name == 'events':
+                events.append(entry)
+            else:
+                headers.append(field_name)
+                entries.append(entry)
+            
+        if len(actigraphies) > 0:
+            headers.append('actigraphy')
+            entries.append(actigraphies)
+        
+        if len(events) > 0:
+            headers.append('events')
+            entries.append(events)
 
-    #         header = df.process_header(key)
-
-    #         # these headers contain datetimes in various forms, so we want to standardise them
-    #         if header in ('id', 'tracking_start', 'tracking_end', 'alarm_scheduled'):
-    #             datetime_value = df.process_dates(header, val)
-
-    #             if header == 'id':
-    #                 id = datetime_value
-    #             else:
-    #                 val = datetime.strftime(datetime_value, '%Y-%m-%d %H:%M')
-
-    #         elif header in ('tracking_hours'):
-    #             val = df.process_numbers(val)
-
-    #         elif header.startswith('event'):
-    #             event = df.process_event(val)
-    #             header = 'events'
-    #             events.append(event)
-    #             val = events
-
-    #         elif header[0].isdigit():
-    #             actigraphy = df.process_actigraphy(header, val, id)
-    #             header = 'actigraphy'
-    #             actigraphies.append(actigraphy)
-    #             val = actigraphies
-
-    #         headers.append(header)
-    #         details.append(val)
-    #         # records[header].append(val)
-
-    #     zip_it = zip(headers, details)
-    #     # print(dict(zip_it))
-    #     item = dict(zip_it)
-    #     json_array.append(item)
-    #     print("goat")
-    #     i = i + 1
-    #     print(i)
-    #     if i == 30:
-    #         # print(records)
-    #         break
-
-    # # print(json_array)
-    #     # break
-
-    # result = json.dumps(json_array)
-    # # print(result)
-
-    # # convert Python json_array to JSON String and write to file
-    # with open(r'sleep-export.json', 'w', encoding='utf-8') as jsonf:
-    #     jsonf.write(result)
+        zip_it = zip(headers, entries)
+        item = dict(zip_it)
+        print(item)
+        break
+            
 
 
 if __name__ == "__main__":
