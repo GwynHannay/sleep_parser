@@ -8,6 +8,8 @@ Right now, this just takes a CSV file from the Sleep as Android app and converts
 
 State at 11th December 2021: This is very much a WIP, so please excuse all the random crap and comments. After the MVP is done, a proper versioning process will be put in place.
 
+Update 19th December 2021: This now produces a monthly JSON file for Sleep as Android CSV files, but only if there is no noise recording! The current code excepts two rows per sleep record, and noise recording adds a third which breaks the current script.
+
 ## Technologies
 
 **Language:** Python 3.9.7

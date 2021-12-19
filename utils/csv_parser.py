@@ -130,3 +130,9 @@ def build_records(records):
     json_string = df.process_array(records)
 
     return json_string
+
+
+def get_suffix():
+    suffix = df.process_suffix(globals.start_time)
+
+    return suffix

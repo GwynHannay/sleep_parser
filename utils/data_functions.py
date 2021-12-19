@@ -5,6 +5,12 @@ from utils import globals
 globals.init()
 
 
+def process_suffix(pk) -> str:
+    suffix = datetime.strftime(pk, '%Y-%m')
+
+    return suffix
+
+
 def process_pk(key: str) -> int:
     datetime_value = datetime.fromtimestamp(int(key)/1000)
 

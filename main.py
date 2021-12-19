@@ -1,5 +1,9 @@
 import csv
+import json
 from utils import csv_parser as cps
+from utils import globals
+
+globals.init()
 
 
 def conversion(csv_file: str):
@@ -29,20 +33,33 @@ def conversion(csv_file: str):
     # now that we have a dictionary of headers and values
     # let's identify each part and convert it into
     # something much more useable
-    i = 0
-    for record in first_pass:
-        suffix = 'first'
-        while suffix != 'done':
+    suffix, previous_suffix = 'append', 'append'
+    i, records = 0, len(first_pass)
+    #print(first_pass[records-1])
+    while suffix != 'done':
+        for record in first_pass:
             entry = cps.saa_field_parser(record)
-            json_array.append(entry)
-            i = i + 1
-            if i > 500: break
-    #print(json_array)
-    
-    result = cps.build_records(json_array)
+            suffix = cps.get_suffix()
 
-    with open(r'sleep-export-new.json', 'w', encoding='utf-8') as jsonf:
-         jsonf.write(result)
+            if suffix != previous_suffix and previous_suffix != 'append':
+                json_array.reverse()
+                result = cps.build_records(json_array)
+
+                # with open(r'sleep-export-' + previous_suffix + r'.json', 'w', encoding='utf-8') as jsonf:
+                #     jsonf.write(result)
+                
+                json_array = []
+            
+            json_array.append(entry)
+        
+            previous_suffix = suffix
+            if i == 451:
+                print(record)
+
+            i = i + 1
+            if i > records:
+                suffix = 'done'
+
             
 
 
