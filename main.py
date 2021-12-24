@@ -60,7 +60,7 @@ def conversion(csv_file: str):
                 if i > records:
                     suffix = 'done'
     except Exception as e:
-        logging.error("Problem opening CSV file. {}".format(e), exc_info=True)
+        logging.exception("Problem opening CSV file. {}".format(e))
 
 
 if __name__ == "__main__":
@@ -70,4 +70,4 @@ if __name__ == "__main__":
     try:
         conversion(csv_file)
     except Exception as e:
-        logging.error("Error sending file to conversion method: {}, {}.".format(csv_file, e), exc_info=True)
+        logging.exception("Error sending file to conversion method: {}, {}.".format(csv_file, e))
