@@ -26,9 +26,11 @@ def conversion(csv_file: str):
         for row in csv_reader:
             if row[0] == 'Id':
                 headers = cps.csv_headers(row)
-            else:
+            elif row[0].isdigit():
                 first_pass.append(cps.combine_record(
                     headers, row))
+            else:
+                continue
 
     # now that we have a dictionary of headers and values
     # let's identify each part and convert it into
@@ -45,16 +47,14 @@ def conversion(csv_file: str):
                 json_array.reverse()
                 result = cps.build_records(json_array)
 
-                # with open(r'sleep-export-' + previous_suffix + r'.json', 'w', encoding='utf-8') as jsonf:
-                #     jsonf.write(result)
+                with open(r'sleep-export-' + previous_suffix + r'.json', 'w', encoding='utf-8') as jsonf:
+                    jsonf.write(result)
                 
                 json_array = []
             
             json_array.append(entry)
         
             previous_suffix = suffix
-            if i == 451:
-                print(record)
 
             i = i + 1
             if i > records:

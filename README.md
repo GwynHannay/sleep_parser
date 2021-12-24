@@ -10,6 +10,8 @@ State at 11th December 2021: This is very much a WIP, so please excuse all the r
 
 Update 19th December 2021: This now produces a monthly JSON file for Sleep as Android CSV files, but only if there is no noise recording! The current code excepts two rows per sleep record, and noise recording adds a third which breaks the current script.
 
+Update 24th December 2021: Noise recording will no longer break the script, but it will be skipped.
+
 ## Technologies
 
 **Language:** Python 3.9.7
