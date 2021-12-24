@@ -1,4 +1,4 @@
-import csv
+import csv, logging
 from utils import csv_parser as cps, globals
 
 globals.init()
@@ -60,15 +60,14 @@ def conversion(csv_file: str):
                 if i > records:
                     suffix = 'done'
     except Exception as e:
-        print("Problem opening CSV file. {}".format(e))
+        logging.error("Problem opening CSV file. {}".format(e), exc_info=True)
 
 
 if __name__ == "__main__":
     # set the name of our CSV file to be transformed
-    csv_file = r'sleep-as-android/csv/sleep-export.csv'
+    csv_file = r'sleep-as-android/csv/sleep-export--.csv'
 
     try:
         conversion(csv_file)
     except Exception as e:
-        Exception(
-            "Error sending file to conversion method: {}, {}.".format(csv_file, e))
+        logging.error("Error sending file to conversion method: {}, {}.".format(csv_file, e), exc_info=True)
