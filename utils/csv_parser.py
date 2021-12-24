@@ -72,7 +72,7 @@ def saa_field_parser(record):
     if len(actigraphies) > 0:
         headers.append('actigraphy')
         entries.append(actigraphies)
-    
+
     if len(events) > 0:
         headers.append('events')
         entries.append(events)
