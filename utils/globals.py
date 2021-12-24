@@ -1,7 +1,8 @@
 from datetime import datetime
 
+
 def init():
-    global start_time 
+    global start_time
     global saa_fields
 
     start_time = datetime
