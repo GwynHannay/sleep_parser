@@ -149,28 +149,35 @@ def process_event(event: str) -> dict:
     return event_dict
 
 
-def process_actigraphy(time, value, start_time):
-    """[summary]
+def process_actigraphy(time: str, value: str, start_time) -> dict[str, str]:
+    """Specifically handles actigraphic events from Sleep as Android.
+    The header fields for these are made of the time (not including date)
+    of the data recorded, so we want to get the global start time and
+    use this to add a timestamp to each data point.
 
     Parameters
     ----------
-    time : [type]
-        [description]
-    value : [type]
-        [description]
-    start_time : [type]
-        [description]
+    time : str
+        Hour and minute in string format.
+    value : str
+        Actigraphic value.
+    start_time : datetime
+        Global start time of this sleep record.
 
     Returns
     -------
-    [type]
-        [description]
+    dict[str, str]
+        Completed dictionary of actigraphic event, ready to be inserted into the
+        record.
     """
     act_time_part = datetime.strptime(time, '%H:%M').time()
     start_time_part = start_time.time()
     start_time_date = start_time.date()
     next_day_date = start_time_date + timedelta(days=1)
 
+    # the date isn't included in the actigraphic header, so once the time
+    # recorded is greater than the time that this sleep session started, we
+    # can assume it's the next day
     if act_time_part > start_time_part:
         act_datetime = datetime.combine(start_time_date, act_time_part)
     else:
@@ -184,7 +191,19 @@ def process_actigraphy(time, value, start_time):
     return act_dict
 
 
-def process_array(records):
+def process_array(records: list) -> str:
+    """Receives an array and converts it into a JSON string.
+
+    Parameters
+    ----------
+    records : list
+        An array of records.
+
+    Returns
+    -------
+    str
+        A JSON string.
+    """
     json_string = json.dumps(records)
 
     return json_string
