@@ -6,11 +6,7 @@ This project is designed to process sleep data in its raw format and output it i
 
 Right now, this just takes a CSV file from the Sleep as Android app and converts it into a JSON file, but future goals are to allow for more options and move on to sleep data from other systems, including CPAP machines.
 
-State at 11th December 2021: This is very much a WIP, so please excuse all the random crap and comments. After the MVP is done, a proper versioning process will be put in place.
-
-Update 19th December 2021: This now produces a monthly JSON file for Sleep as Android CSV files, but only if there is no noise recording! The current code excepts two rows per sleep record, and noise recording adds a third which breaks the current script.
-
-Update 24th December 2021: Noise recording will no longer break the script, but it will be skipped.
+State at 26th December 2021: The MVP is almost done, after which a proper versioning process will be put in place. It currently outputs a monthly JSON file for Sleep as Android CSV files, but if there is any noise recording it will simply exclude that row from the output.
 
 ## Technologies
 
