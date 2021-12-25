@@ -1,18 +1,20 @@
 from utils import data_functions as df, globals
 
 
-def csv_headers(headers) -> list[str]:
-    """[summary]
+def csv_headers(headers: list[str]) -> list[str]:
+    """Processes header rows in the CSV document.
+    Specifically, we want to append a number to the 'Event' fields so
+    a dictionary doesn't overwrite each with the next one.
 
     Parameters
     ----------
-    headers : [type]
-        [description]
+    headers : list[str]
+        The row of headers from the CSV file.
 
     Returns
     -------
-    [type]
-        [description]
+    list[str]
+        The row of headers now processed.
     """
     processed, i = [], 0
     for header in headers:
@@ -25,20 +27,21 @@ def csv_headers(headers) -> list[str]:
     return processed
 
 
-def combine_record(headers, row) -> dict[str, str]:
-    """[summary]
+def combine_record(headers: list[str], row: list[str]) -> dict[str, str]:
+    """Quick function that takes two lists and joins them together
+    into a dictionary.
 
     Parameters
     ----------
-    headers : [type]
-        [description]
-    row : [type]
-        [description]
+    headers : list[str]
+        The list of headers from the CSV file.
+    row : list[str]
+        The list of values from the CSV file.
 
     Returns
     -------
-    [type]
-        [description]
+    dict[str, str]
+        A dictionary where each header is matched with its value.
     """
     zip_it = zip(headers, row)
     record = dict(zip_it)
@@ -46,7 +49,19 @@ def combine_record(headers, row) -> dict[str, str]:
     return record
 
 
-def saa_field_parser(record):
+def saa_field_parser(record: dict[str, str]) -> dict[str, str]:
+    """Handles the processing of all records from the CSV file.
+
+    Parameters
+    ----------
+    record : dict[str, str]
+        A single record from the CSV file, i.e. a single sleep session.
+
+    Returns
+    -------
+    dict[str, str]
+        The completely processed record, ready to be written into the JSON file.
+    """
     headers, entries, actigraphies, events = [], [], [], []
 
     for key in record:
@@ -82,13 +97,43 @@ def saa_field_parser(record):
     return entry
 
 
-def get_instructions(header) -> dict:
+def get_instructions(header: str) -> dict:
+    """Receives a field name and returns with a dictionary of instructions
+    from the global dictionary defining each field.
+
+    Parameters
+    ----------
+    header : str
+        The field name.
+
+    Returns
+    -------
+    dict
+        Instructions for how to handle this field based on the name.
+    """
     instruction = globals.saa_fields[header]
 
     return instruction
 
 
-def follow_instructions(header, value, datatype):
+def follow_instructions(header: str, value: str, datatype: dict) -> tuple:
+    """Renames each field and handles its contents based on the information
+    sent with the header and value in the dictionary.
+
+    Parameters
+    ----------
+    header : str
+        Original field name from the CSV file.
+    value : str
+        Value accompanying the field name.
+    datatype : dict
+        'Instructions', i.e. new field name and end data type.
+
+    Returns
+    -------
+    tuple
+        Completed 'entry' for the record: processed field name and value.
+    """
     entry = ()
     field_name = datatype['name']
     d_type = datatype['type']
@@ -124,13 +169,33 @@ def follow_instructions(header, value, datatype):
     return entry
 
 
-def build_records(records):
+def build_records(records: list) -> str:
+    """Transforms a series of sleep sessions into a JSON string.
+
+    Parameters
+    ----------
+    records : list
+        All records to be written into a JSON file.
+
+    Returns
+    -------
+    str
+        JSON string to be written into the JSON file.
+    """
     json_string = df.process_array(records)
 
     return json_string
 
 
-def get_suffix():
+def get_suffix() -> str:
+    """Retrieves the suffix for this JSON file based on the start date of the
+    first sleep session.
+
+    Returns
+    -------
+    str
+        Suffix for the JSON file in the form of 'year-month'.
+    """
     suffix = df.process_suffix(globals.start_time)
 
     return suffix

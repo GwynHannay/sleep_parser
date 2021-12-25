@@ -6,12 +6,38 @@ globals.init()
 
 
 def process_suffix(pk) -> str:
+    """Transforms a datetime field into a string of 'year-month'
+
+    Parameters
+    ----------
+    pk : datetime
+        Datetime of the first sleep session in this batch.
+
+    Returns
+    -------
+    str
+        Year and month of the datetime, in format 'year-month'.
+    """
     suffix = datetime.strftime(pk, '%Y-%m')
 
     return suffix
 
 
 def process_pk(key: str) -> int:
+    """Handles the primary key from Sleep as Android, which is the session
+    start Unix timestamp. It is assigned to the global variable 'start_time'
+    and then transformed for primary key purposes.
+
+    Parameters
+    ----------
+    key : str
+        The Unix timestamp from the 'Id' field in the CSV file.
+
+    Returns
+    -------
+    int
+        Original Unix timestamp in integer form.
+    """
     datetime_value = datetime.fromtimestamp(int(key)/1000)
 
     globals.start_time = datetime_value
@@ -21,19 +47,18 @@ def process_pk(key: str) -> int:
 
 
 def process_dates(detail: str) -> str:
-    """[summary]
+    """Parses a string datetime from one format, then returns it as a string
+    in a better format.
 
     Parameters
     ----------
-    header : str
-        [description]
     detail : str
-        [description]
+        Original datetime string: day. month. year hour:minute
 
     Returns
     -------
-    datetime
-        [description]
+    str
+        New datetime string: year-month-day hour:minute
     """
     datetime_value = datetime.strptime(detail, '%d. %m. %Y %H:%M')
     datetime_string = datetime.strftime(datetime_value, '%Y-%m-%d %H:%M')
@@ -42,19 +67,17 @@ def process_dates(detail: str) -> str:
 
 
 def process_float(detail: str) -> float:
-    """[summary]
+    """Receives a string and returns a float.
 
     Parameters
     ----------
-    header : [type]
-        [description]
-    detail : [type]
-        [description]
+    detail : str
+        String field.
 
     Returns
     -------
-    [type]
-        [description]
+    float
+        Field as a float.
     """
     value = float(detail)
 
@@ -62,29 +85,46 @@ def process_float(detail: str) -> float:
 
 
 def process_integer(detail: str) -> int:
+    """Receives a string and returns an integer.
+
+    Parameters
+    ----------
+    detail : str
+        String field.
+
+    Returns
+    -------
+    int
+        Field as an integer.
+    """
     value = int(detail)
 
     return value
 
 
-def process_event(event):
-    """[summary]
+def process_event(event: str) -> dict:
+    """Specifically handles 'Event' fields from Sleep as Android.
+    This involves splitting the event type, the Unix timestamp, and
+    the event's value if it has one.
 
     Parameters
     ----------
-    event : [type]
-        [description]
+    event : str
+        String with event information separated by hyphens.
 
     Returns
     -------
-    [type]
-        [description]
+    dict
+        Completed dictionary with event split into type, datetime, and value (if
+        exists).
     """
     event_parts = event.split('-', 2)
 
     event_type = event_parts[0]
 
     timestamp = datetime.fromtimestamp(int(event_parts[1])/1000)
+    # we want milliseconds, because the DHA event occurs every 1 millisecond
+    # until you fall asleep
     event_time = timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')
 
     if len(event_parts) > 2:
