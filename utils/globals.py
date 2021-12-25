@@ -2,6 +2,8 @@ from datetime import datetime
 
 
 def init():
+    """Contains global variables.
+    """    
     global start_time
     global saa_fields
 

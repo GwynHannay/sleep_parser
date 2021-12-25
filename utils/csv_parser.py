@@ -3,8 +3,8 @@ from utils import data_functions as df, globals
 
 def csv_headers(headers: list[str]) -> list[str]:
     """Processes header rows in the CSV document.
-    Specifically, we want to append a number to the 'Event' fields so
-    a dictionary doesn't overwrite each with the next one.
+    Specifically, we want to append an incrementing integer to the 'Event' 
+    fields so that a dictionary doesn't overwrite each event with the next one.
 
     Parameters
     ----------
@@ -14,7 +14,7 @@ def csv_headers(headers: list[str]) -> list[str]:
     Returns
     -------
     list[str]
-        The row of headers now processed.
+        The modified list of headers which can now be easily merged with its details row.
     """
     processed, i = [], 0
     for header in headers:
@@ -50,12 +50,14 @@ def combine_record(headers: list[str], row: list[str]) -> dict[str, str]:
 
 
 def saa_field_parser(record: dict[str, str]) -> dict[str, str]:
-    """Handles the processing of all records from the CSV file.
+    """Processes a single record from the CSV file, retrieving instructions
+    on how to handle each field and sending them off to be transformed before
+    returning a fully formatted record.
 
     Parameters
     ----------
     record : dict[str, str]
-        A single record from the CSV file, i.e. a single sleep session.
+        A record of headers and values from the CSV file, i.e. a single sleep session.
 
     Returns
     -------
@@ -69,21 +71,23 @@ def saa_field_parser(record: dict[str, str]) -> dict[str, str]:
         value = record[key]
 
         if header.startswith('Event'):
-            datatype = get_instructions('Event')
-            result = follow_instructions(header, value, datatype)
+            instructions = get_instructions('Event')
+            result = follow_instructions(header, value, instructions)
             events.append(result[1])
 
         elif header[0].isdigit():
-            datatype = get_instructions('Actigraphy')
-            result = follow_instructions(header, value, datatype)
+            instructions = get_instructions('Actigraphy')
+            result = follow_instructions(header, value, instructions)
             actigraphies.append(result[1])
 
         else:
-            datatype = get_instructions(header)
-            result = follow_instructions(header, value, datatype)
+            instructions = get_instructions(header)
+            result = follow_instructions(header, value, instructions)
             headers.append(result[0])
             entries.append(result[1])
 
+    # Actigraphic data and event data will be nested, so add them
+    # under a single header.
     if len(actigraphies) > 0:
         headers.append('actigraphy')
         entries.append(actigraphies)
@@ -99,7 +103,7 @@ def saa_field_parser(record: dict[str, str]) -> dict[str, str]:
 
 def get_instructions(header: str) -> dict:
     """Receives a field name and returns with a dictionary of instructions
-    from the global dictionary defining each field.
+    from the global variable that defines each field.
 
     Parameters
     ----------
@@ -116,9 +120,9 @@ def get_instructions(header: str) -> dict:
     return instruction
 
 
-def follow_instructions(header: str, value: str, datatype: dict) -> tuple:
-    """Renames each field and handles its contents based on the information
-    sent with the header and value in the dictionary.
+def follow_instructions(header: str, value: str, field_details: dict) -> tuple:
+    """Receives a field name, value, and instructions on how to handle this
+    field, then follows them accordingly.
 
     Parameters
     ----------
@@ -126,47 +130,47 @@ def follow_instructions(header: str, value: str, datatype: dict) -> tuple:
         Original field name from the CSV file.
     value : str
         Value accompanying the field name.
-    datatype : dict
+    field_details : dict
         'Instructions', i.e. new field name and end data type.
 
     Returns
     -------
     tuple
-        Completed 'entry' for the record: processed field name and value.
+        Processed header and value for the record.
     """
-    entry = ()
-    field_name = datatype['name']
-    d_type = datatype['type']
+    field = ()
+    field_name = field_details['name']
+    d_type = field_details['type']
 
     if d_type == 'pk':
         pk_value = df.process_pk(value)
-        entry = (field_name, pk_value)
+        field = (field_name, pk_value)
 
     elif d_type == 'datetime':
         dt_value = df.process_dates(value)
-        entry = (field_name, dt_value)
+        field = (field_name, dt_value)
 
     elif d_type == 'float':
         f_value = df.process_float(value)
-        entry = (field_name, f_value)
+        field = (field_name, f_value)
 
     elif d_type == 'integer':
         i_value = df.process_integer(value)
-        entry = (field_name, i_value)
+        field = (field_name, i_value)
 
     elif d_type == 'string':
-        entry = (field_name, value)
+        field = (field_name, value)
 
     elif d_type == 'array':
         if field_name == 'actigraphy':
             act = df.process_actigraphy(header, value, globals.start_time)
-            entry = (field_name, act)
+            field = (field_name, act)
 
         elif field_name == 'events':
             event = df.process_event(value)
-            entry = (field_name, event)
+            field = (field_name, event)
 
-    return entry
+    return field
 
 
 def build_records(records: list) -> str:

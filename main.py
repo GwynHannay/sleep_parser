@@ -13,19 +13,19 @@ def conversion(csv_file: str):
     Parameters
     ----------
     csv_file : str
-        Name / location of the CSV file to be processed.
+        Name and location of the CSV file to be processed.
     """
     first_pass, headers, json_array = [], [], []
 
-    # load CSV file
+    # Load CSV file.
     try:
         with open(csv_file, encoding='utf-8') as csvf:
             csv_reader = csv.reader(csvf)
 
-            # each row is either a header row, a values row, or a noise recording row
-            # if this is a header row, store it in a new array
-            # if this is a values row, combine it with the previous row's headers
-            # if this is a noise recording row, skip it
+            # Each row is either a header row, a values row, or a noise recording row.
+            # If this is a header row, store it in a new array to be merged with its values.
+            # If this is a values row, combine it with the previous row's headers.
+            # If this is a noise recording row, skip it. We don't process these in this version.
             for row in csv_reader:
                 if row[0] == 'Id':
                     headers = cps.csv_headers(row)
@@ -35,9 +35,10 @@ def conversion(csv_file: str):
                 else:
                     continue
 
-        # now that we have a dictionary of headers and values
-        # let's identify each part and convert it into
-        # something much more useable
+        # Now that we have a dictionary of headers and values, let's identify each part and 
+        # convert it into something much more useable.
+        # Process each record in the dictionary and write it into a JSON file every time the
+        # month changes.
         suffix, previous_suffix = 'append', 'append'
         i, records = 0, len(first_pass)
 
@@ -47,6 +48,9 @@ def conversion(csv_file: str):
                 suffix = cps.get_suffix()
 
                 if suffix != previous_suffix and previous_suffix != 'append':
+                    # Since the Sleep as Android data is stored with the most recent record at
+                    # the top, once we have a completed month we should reverse the order so it starts
+                    # at day one.
                     json_array.reverse()
                     result = cps.build_records(json_array)
 
@@ -68,7 +72,7 @@ def conversion(csv_file: str):
 
 
 if __name__ == "__main__":
-    # get our CSV filename and send it to our main function
+    # Set our CSV filename and send it to our main function.
     csv_file = r'sleep-as-android/csv/sleep-export.csv'
 
     conversion(csv_file)
