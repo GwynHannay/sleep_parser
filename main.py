@@ -7,7 +7,7 @@ globals.init()
 logger = logging.getLogger('main')
 
 
-def conversion(csv_file: str):
+def main(csv_file: str):
     """Converts and transforms a CSV file from the Sleep as Android app into a JSON file.
 
     Parameters
@@ -75,4 +75,4 @@ if __name__ == "__main__":
     # Set our CSV filename and send it to our main function.
     csv_file = r'sleep-as-android/csv/sleep-export.csv'
 
-    conversion(csv_file)
+    main(csv_file)
