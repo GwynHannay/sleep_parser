@@ -26,6 +26,12 @@ Resulting JSON file:
 
 ![Screenshot 2021-12-26 061844](https://user-images.githubusercontent.com/8345824/147394636-806b77da-6ddf-4e58-84c5-0a1c9bb648f2.png)
 
+## Usage
+
+Using this is easy! From the main folder of this repository, simply create the path "/sleep-as-android/csv/" and place your "sleep-export.csv" file there.
+
+Alternatively, you can change the relative file path in main.py.
+
 ## Technologies
 
 **Language:** Python 3.9.7

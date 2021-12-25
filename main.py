@@ -69,6 +69,6 @@ def conversion(csv_file: str):
 
 if __name__ == "__main__":
     # get our CSV filename and send it to our main function
-    csv_file = r'sleep-as-android/csv/sleep-export--.csv'
+    csv_file = r'sleep-as-android/csv/sleep-export.csv'
 
     conversion(csv_file)
