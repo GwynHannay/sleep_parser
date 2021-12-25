@@ -40,7 +40,7 @@ Alternatively, you can change the relative file path in ``main.py``.
 
 **26th December 2021:** The MVP is almost done, after which a proper versioning process will be put in place. It currently outputs a monthly JSON file for Sleep as Android CSV files, but if there is any noise recording it will simply exclude that row from the output.
 
-## Technologies
+## General Information
 
 **Language:** Python 3.9.7
 
