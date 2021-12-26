@@ -1,6 +1,9 @@
 # Sleep Parser
 ![Top Language](https://img.shields.io/github/languages/top/GwynHannay/sleep-parser)
+![Licence](https://img.shields.io/github/license/GwynHannay/sleep-parser)
 ![Last Commit](https://img.shields.io/github/last-commit/GwynHannay/sleep-parser)
+![Latest Release](https://img.shields.io/github/v/release/GwynHannay/sleep-parser)
+![Total Downloads](https://img.shields.io/github/downloads/GwynHannay/sleep-parser/total)
 
 Data in the Sleep as Android app comes in a CSV file that is very difficult to process with the aim of examining it because each sleep record is of variable length. It's made up of header rows and values rows.
 
