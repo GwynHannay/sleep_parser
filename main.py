@@ -53,9 +53,13 @@ def main(csv_file: str):
                     # at day one.
                     json_array.reverse()
                     result = cps.build_records(json_array)
+                    filename = r'sleep-export-' + previous_suffix + r'.json'
 
-                    with open(r'sleep-export-' + previous_suffix + r'.json', 'w', encoding='utf-8') as jsonf:
-                        jsonf.write(result)
+                    try:
+                        with open(filename, 'w', encoding='utf-8') as jsonf:
+                            jsonf.write(result)
+                    except IOError as io:
+                        logger.exception("Problem writing to JSON file: {}. {}".format(filename, io))
 
                     json_array = []
 
@@ -67,8 +71,8 @@ def main(csv_file: str):
                 if i > records:
                     suffix = 'done'
 
-    except Exception as e:
-        logger.exception("Problem opening CSV file. {}".format(e))
+    except FileNotFoundError as fnf:
+        logger.exception("Problem opening CSV file: {}. {}".format(csv_file, fnf))
 
 
 if __name__ == "__main__":
