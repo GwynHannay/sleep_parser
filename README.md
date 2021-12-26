@@ -27,7 +27,7 @@ _Resulting JSON file:_
 
 ![Screenshot 2021-12-26 061838](https://user-images.githubusercontent.com/8345824/147394626-43edf7bf-4f0e-4740-81e0-e597369ac15a.png)
 
-![Screenshot 2021-12-26 061844](https://user-images.githubusercontent.com/8345824/147394636-806b77da-6ddf-4e58-84c5-0a1c9bb648f2.png)
+![image](https://user-images.githubusercontent.com/8345824/147396878-03889f60-985e-4179-b3e7-6866128b0f4e.png)
 
 ## Usage
 
@@ -41,7 +41,7 @@ Alternatively, you can change the relative file path in ``main.py``.
 
 ## Updates
 
-**26th December 2021:** The MVP is almost done, after which a proper versioning process will be put in place. It currently outputs a monthly JSON file for Sleep as Android CSV files, but if there is any noise recording it will simply exclude that row from the output.
+**26th December 2021:** This project has finally been launched! It currently outputs a monthly JSON file for Sleep as Android CSV files, but if there is any noise recording it will simply exclude that row from the output.
 
 ## General Information
 
