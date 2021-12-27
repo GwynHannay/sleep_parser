@@ -7,12 +7,12 @@ def init():
     global start_time
     global saa_fields
 
-    # this is the start datetime of the sleep session which is set
-    # at the beginning of each new sleep record
+    # This is the start datetime of the sleep session which is set
+    # at the beginning of each new sleep record.
     start_time = datetime
 
-    # these are the fields we've identified in the Sleep as Android
-    # output, and this dictionary details how we handle each one
+    # These are the fields we've identified in the Sleep as Android
+    # output, and this dictionary details how we handle each one.
     saa_fields = {
         'Id': {
             'name': 'id',

@@ -102,7 +102,7 @@ def process_integer(detail: str) -> int:
     return value
 
 
-def process_actigraphy(time: str, value: str, start_time) -> dict[str, str]:
+def process_actigraphy(time: str, value: str, start_time) -> dict:
     """Specifically handles actigraphic events from Sleep as Android.
     The header fields for these are made of the time (not including date)
     of the data recorded, so we want to get the global start time and
@@ -119,7 +119,7 @@ def process_actigraphy(time: str, value: str, start_time) -> dict[str, str]:
 
     Returns
     -------
-    dict[str, str]
+    dict
         Completed dictionary of actigraphic event with the datetime recorded and value
         recorded.
     """
