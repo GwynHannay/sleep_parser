@@ -39,9 +39,15 @@ Alternatively, you can change the relative file path in ``main.py``.
 
 ![image](https://user-images.githubusercontent.com/8345824/147394742-adc1ef36-2489-459b-a76f-c8f82400290e.png)
 
-## Updates
+## Release History
 
-**26th December 2021:** This project has finally been launched! It currently outputs a monthly JSON file for Sleep as Android CSV files, but if there is any noise recording it will simply exclude that row from the output.
+* v1.0.2: 28th December 2021
+    * FIX: Errors when running on a web server caused by attempt to subscript types such as `dict[str, str].`
+    * CHANGE: Add ability to specify output directory for JSON files.
+* v1.0.1: 26th December 2021
+    * CHANGE: Update of README.
+* v1.0.0: 26th December 2021
+    * Original project launch.
 
 ## General Information
 
