@@ -1,19 +1,19 @@
 from utils import data_functions as df, globals
 
 
-def csv_headers(headers: list[str]) -> list[str]:
+def csv_headers(headers: list) -> list:
     """Processes header rows in the CSV document.
     Specifically, we want to append an incrementing integer to the 'Event' 
     fields so that a dictionary doesn't overwrite each event with the next one.
 
     Parameters
     ----------
-    headers : list[str]
+    headers : list
         The row of headers from the CSV file.
 
     Returns
     -------
-    list[str]
+    list
         The modified list of headers which can now be easily merged with its details row.
     """
     processed, i = [], 0
@@ -27,20 +27,20 @@ def csv_headers(headers: list[str]) -> list[str]:
     return processed
 
 
-def combine_record(headers: list[str], row: list[str]) -> dict[str, str]:
+def combine_record(headers: list, row: list) -> dict:
     """Quick function that takes two lists and joins them together
     into a dictionary.
 
     Parameters
     ----------
-    headers : list[str]
+    headers : list
         The list of headers from the CSV file.
-    row : list[str]
+    row : list
         The list of values from the CSV file.
 
     Returns
     -------
-    dict[str, str]
+    dict
         A dictionary where each header is matched with its value.
     """
     zip_it = zip(headers, row)
@@ -49,19 +49,19 @@ def combine_record(headers: list[str], row: list[str]) -> dict[str, str]:
     return record
 
 
-def saa_field_parser(record: dict[str, str]) -> dict[str, str]:
+def saa_field_parser(record: dict) -> dict:
     """Processes a single record from the CSV file, retrieving instructions
     on how to handle each field and sending them off to be transformed before
     returning a fully formatted record.
 
     Parameters
     ----------
-    record : dict[str, str]
+    record : dict
         A record of headers and values from the CSV file, i.e. a single sleep session.
 
     Returns
     -------
-    dict[str, str]
+    dict
         The completely processed record, ready to be written into the JSON file.
     """
     headers, entries, actigraphies, events = [], [], [], []
