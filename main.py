@@ -7,13 +7,15 @@ globals.init()
 logger = logging.getLogger('main')
 
 
-def main(csv_file: str):
+def main(csv_file: str, json_dir: str):
     """Converts and transforms a CSV file from the Sleep as Android app into a JSON file.
 
     Parameters
     ----------
     csv_file : str
         Name and location of the CSV file to be processed.
+    json_dir: str
+        Directory to store the output JSON files.
     """
     first_pass, headers, json_array = [], [], []
 
@@ -53,7 +55,7 @@ def main(csv_file: str):
                     # at day one.
                     json_array.reverse()
                     result = cps.build_records(json_array)
-                    filename = r'sleep-export-' + previous_suffix + r'.json'
+                    filename = json_dir + r'/sleep-export-' + previous_suffix + r'.json'
 
                     try:
                         with open(filename, 'w', encoding='utf-8') as jsonf:
@@ -76,7 +78,10 @@ def main(csv_file: str):
 
 
 if __name__ == "__main__":
-    # Set our CSV filename and send it to our main function.
+    """Passes the location and filename of the CSV file, as well as the directory
+    to store the JSON files produced to the main function.
+    """    
     csv_file = r'sleep-as-android/csv/sleep-export.csv'
+    json_directory = r'sleep-as-android/json'
 
-    main(csv_file)
+    main(csv_file, json_directory)
