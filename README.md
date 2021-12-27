@@ -27,7 +27,7 @@ _Resulting JSON file:_
 
 ![Screenshot 2021-12-26 061838](https://user-images.githubusercontent.com/8345824/147394626-43edf7bf-4f0e-4740-81e0-e597369ac15a.png)
 
-![image](https://user-images.githubusercontent.com/8345824/147396878-03889f60-985e-4179-b3e7-6866128b0f4e.png)
+![image](https://user-images.githubusercontent.com/8345824/147508151-0ae09139-b077-43f2-9847-fc5520f694c8.png)
 
 ## Usage
 
@@ -41,12 +41,12 @@ Alternatively, you can change the relative file path in ``main.py``.
 
 ## Release History
 
-* v1.0.2: 28th December 2021
+* 1.0.2
     * FIX: Errors when running on a web server caused by attempt to subscript types such as `dict[str, str].`
     * CHANGE: Add ability to specify output directory for JSON files.
-* v1.0.1: 26th December 2021
+* 1.0.1
     * CHANGE: Update of README.
-* v1.0.0: 26th December 2021
+* 1.0.0
     * Original project launch.
 
 ## General Information
