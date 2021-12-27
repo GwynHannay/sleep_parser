@@ -1,5 +1,6 @@
 import csv
 import logging
+import os
 from utils import csv_parser as cps, globals
 
 globals.init()
@@ -18,6 +19,10 @@ def main(csv_file: str, json_dir: str):
         Directory to store the output JSON files.
     """
     first_pass, headers, json_array = [], [], []
+
+    # Make sure the JSON directory exists before we start this whole process.
+    if not os.path.isdir(json_dir):
+        os.makedirs(json_dir)
 
     # Load CSV file.
     try:
@@ -82,6 +87,6 @@ if __name__ == "__main__":
     to store the JSON files produced to the main function.
     """    
     csv_file = r'sleep-as-android/csv/sleep-export.csv'
-    json_directory = r'sleep-as-android/json'
+    json_directory = r'json/sleepy'
 
     main(csv_file, json_directory)
