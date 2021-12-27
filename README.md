@@ -27,7 +27,7 @@ _Resulting JSON file:_
 
 ![Screenshot 2021-12-26 061838](https://user-images.githubusercontent.com/8345824/147394626-43edf7bf-4f0e-4740-81e0-e597369ac15a.png)
 
-![image](https://user-images.githubusercontent.com/8345824/147396878-03889f60-985e-4179-b3e7-6866128b0f4e.png)
+![image](https://user-images.githubusercontent.com/8345824/147508151-0ae09139-b077-43f2-9847-fc5520f694c8.png)
 
 ## Usage
 
@@ -35,13 +35,19 @@ Using this is easy! From the main folder of this repository, simply create the p
 
 ![image](https://user-images.githubusercontent.com/8345824/147394736-d648f4a6-b686-4da8-ad2a-02ef9ecf518e.png)
 
-Alternatively, you can change the relative file path in ``main.py``.
+Alternatively, you can change the relative file path in ``main.py``. You can do this for the location of the CSV file, and specify where the JSON files should go as well (don't include a forward slash after the directory name).
 
-![image](https://user-images.githubusercontent.com/8345824/147394742-adc1ef36-2489-459b-a76f-c8f82400290e.png)
+![image](https://user-images.githubusercontent.com/8345824/147508805-0a2c6d10-c7fa-4ef0-a51c-cb1c57627e88.png)
 
-## Updates
+## Release History
 
-**26th December 2021:** This project has finally been launched! It currently outputs a monthly JSON file for Sleep as Android CSV files, but if there is any noise recording it will simply exclude that row from the output.
+* 1.0.2
+    * FIX: Errors when running on a web server caused by attempt to subscript types such as `dict[str, str].`
+    * ADD: Ability to specify output directory for JSON files.
+* 1.0.1
+    * CHANGE: Update of README.
+* 1.0.0
+    * Original project launch.
 
 ## General Information
 
