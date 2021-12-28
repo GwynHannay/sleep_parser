@@ -41,6 +41,8 @@ Alternatively, you can change the relative file path in ``main.py``. You can do 
 
 ## Release History
 
+* 1.0.3
+   * CHANGE: Raise an exception if the CSV file is not detected as being a valid Sleep as Android export.
 * 1.0.2
     * FIX: Errors when running on a web server caused by attempt to subscript types such as `dict[str, str].`
     * ADD: Ability to specify output directory for JSON files.
