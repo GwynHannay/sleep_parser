@@ -18,7 +18,7 @@ def main(csv_file: str, json_dir: str):
     json_dir: str
         Directory to store the output JSON files.
     """
-    first_pass, headers, json_array = [], [], []
+    first_pass, headers, json_array, i = [], [], [], 0
 
     # Make sure the JSON directory exists before we start this whole process.
     if not os.path.isdir(json_dir):
@@ -40,7 +40,9 @@ def main(csv_file: str, json_dir: str):
                     first_pass.append(cps.combine_record(
                         headers, row))
                 else:
-                    continue
+                    assert i > 0, "First row does not start with 'Id' or a digit. It is: {}".format(row[0])
+                
+                i = i + 1
 
         # Now that we have a dictionary of headers and values, let's identify each part and 
         # convert it into something much more useable.
