@@ -145,6 +145,10 @@ def follow_instructions(header: str, value: str, field_details: dict) -> tuple:
     if d_type == 'pk':
         pk_value = df.process_pk(value)
         field = (field_name, pk_value)
+    
+    elif d_type == 'tz':
+        tz_value = df.process_tz(value)
+        field = (field_name, tz_value)
 
     elif d_type == 'datetime':
         dt_value = df.process_dates(value)

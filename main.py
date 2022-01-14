@@ -88,7 +88,7 @@ if __name__ == "__main__":
     """Passes the location and filename of the CSV file, as well as the directory
     to store the JSON files produced to the main function.
     """    
-    csv_file = r'sleep-as-android/csv/sleep-export.csv'
+    csv_file = r'sleep-as-android/csv/sleep-export-user.csv'
     json_directory = r'sleep-as-android/json'
 
     main(csv_file, json_directory)
