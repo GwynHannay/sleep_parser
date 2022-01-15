@@ -40,11 +40,12 @@ def main(csv_file: str, json_dir: str):
                     first_pass.append(cps.combine_record(
                         headers, row))
                 else:
-                    assert i > 0, "First row does not start with 'Id' or a digit. It is: {}".format(row[0])
-                
+                    assert i > 0, "First row does not start with 'Id' or a digit. It is: {}".format(
+                        row[0])
+
                 i = i + 1
 
-        # Now that we have a dictionary of headers and values, let's identify each part and 
+        # Now that we have a dictionary of headers and values, let's identify each part and
         # convert it into something much more useable.
         # Process each record in the dictionary and write it into a JSON file every time the
         # month changes.
@@ -68,7 +69,8 @@ def main(csv_file: str, json_dir: str):
                         with open(filename, 'w', encoding='utf-8') as jsonf:
                             jsonf.write(result)
                     except IOError as io:
-                        logger.exception("Problem writing to JSON file: {}. {}".format(filename, io))
+                        logger.exception(
+                            "Problem writing to JSON file: {}. {}".format(filename, io))
 
                     json_array = []
 
@@ -81,13 +83,14 @@ def main(csv_file: str, json_dir: str):
                     suffix = 'done'
 
     except FileNotFoundError as fnf:
-        logger.exception("Problem opening CSV file: {}. {}".format(csv_file, fnf))
+        logger.exception(
+            "Problem opening CSV file: {}. {}".format(csv_file, fnf))
 
 
 if __name__ == "__main__":
     """Passes the location and filename of the CSV file, as well as the directory
     to store the JSON files produced to the main function.
-    """    
+    """
     csv_file = r'sleep-as-android/csv/sleep-export-user.csv'
     json_directory = r'sleep-as-android/json'
 

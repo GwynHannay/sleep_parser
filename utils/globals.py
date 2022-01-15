@@ -3,14 +3,14 @@ from datetime import datetime
 
 def init():
     """Contains global variables.
-    """   
-    global pk 
+    """
+    global pk
     global start_time
     global time_zone
     global saa_fields
 
     # This is the primary key of a sleep record from Sleep as
-    # Android, which is a Unix timestamp. It is set at the 
+    # Android, which is a Unix timestamp. It is set at the
     # beginning of each new sleep record.
     pk = int
 

@@ -182,8 +182,9 @@ def process_event(event: str) -> dict:
 
     event_type = event_parts[0]
 
-    timestamp = datetime.fromtimestamp(int(event_parts[1])/1000, ZoneInfo(str(globals.time_zone)))
-    # We want the event time in milliseconds, because the DHA event occurs every 1 
+    timestamp = datetime.fromtimestamp(
+        int(event_parts[1])/1000, ZoneInfo(str(globals.time_zone)))
+    # We want the event time in milliseconds, because the DHA event occurs every 1
     # millisecond until you fall asleep.
     event_time = timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 
