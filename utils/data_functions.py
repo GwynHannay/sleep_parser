@@ -7,9 +7,16 @@ globals.init()
 
 
 def set_start_time():
+    """Using the global variables 'pk' (Unix timestamp) and 'time_zone' from
+    the Sleep as Android file, sets the start time of the sleep session.
+
+    This is used for actigraphy and events.
+    """
     starting = int(globals.pk)
     time_zone = str(globals.time_zone)
+
     datetime_value = datetime.fromtimestamp(starting/1000, ZoneInfo(time_zone))
+
     globals.start_time = datetime_value
 
 
@@ -33,7 +40,7 @@ def process_suffix(pk) -> str:
 
 def process_pk(key: str) -> int:
     """Handles the primary key from Sleep as Android, which is the session
-    start Unix timestamp. It is assigned to the global variable 'start_time'
+    start Unix timestamp. It is assigned to the global variable 'pk'
     and then transformed for primary key purposes.
 
     Parameters
@@ -53,6 +60,20 @@ def process_pk(key: str) -> int:
 
 
 def process_tz(tz: str) -> str:
+    """Handles the time zone from Sleep as Android, assigning it to a global
+    variable 'time_zone' which is later used to correctly transform the Unix
+    timestamps for the session start and events.
+
+    Parameters
+    ----------
+    tz : str
+        The time zone string, e.g. 'Australia/Perth'
+
+    Returns
+    -------
+    str
+        The same time zone string.
+    """
     globals.time_zone = tz
 
     set_start_time()
