@@ -1,8 +1,23 @@
 import json
+from zoneinfo import ZoneInfo
 from datetime import datetime, timedelta
 from utils import globals
 
 globals.init()
+
+
+def set_start_time():
+    """Using the global variables 'pk' (Unix timestamp) and 'time_zone' from
+    the Sleep as Android file, sets the start time of the sleep session.
+
+    This is used for actigraphy and events.
+    """
+    starting = int(globals.pk)
+    time_zone = str(globals.time_zone)
+
+    datetime_value = datetime.fromtimestamp(starting/1000, ZoneInfo(time_zone))
+
+    globals.start_time = datetime_value
 
 
 def process_suffix(pk) -> str:
@@ -25,7 +40,7 @@ def process_suffix(pk) -> str:
 
 def process_pk(key: str) -> int:
     """Handles the primary key from Sleep as Android, which is the session
-    start Unix timestamp. It is assigned to the global variable 'start_time'
+    start Unix timestamp. It is assigned to the global variable 'pk'
     and then transformed for primary key purposes.
 
     Parameters
@@ -38,12 +53,32 @@ def process_pk(key: str) -> int:
     int
         Original Unix timestamp in integer form.
     """
-    datetime_value = datetime.fromtimestamp(int(key)/1000)
-
-    globals.start_time = datetime_value
+    globals.pk = key
 
     value = process_integer(key)
     return value
+
+
+def process_tz(tz: str) -> str:
+    """Handles the time zone from Sleep as Android, assigning it to a global
+    variable 'time_zone' which is later used to correctly transform the Unix
+    timestamps for the session start and events.
+
+    Parameters
+    ----------
+    tz : str
+        The time zone string, e.g. 'Australia/Perth'
+
+    Returns
+    -------
+    str
+        The same time zone string.
+    """
+    globals.time_zone = tz
+
+    set_start_time()
+
+    return tz
 
 
 def process_dates(detail: str) -> str:
@@ -168,8 +203,9 @@ def process_event(event: str) -> dict:
 
     event_type = event_parts[0]
 
-    timestamp = datetime.fromtimestamp(int(event_parts[1])/1000)
-    # We want the event time in milliseconds, because the DHA event occurs every 1 
+    timestamp = datetime.fromtimestamp(
+        int(event_parts[1])/1000, ZoneInfo(str(globals.time_zone)))
+    # We want the event time in milliseconds, because the DHA event occurs every 1
     # millisecond until you fall asleep.
     event_time = timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
 

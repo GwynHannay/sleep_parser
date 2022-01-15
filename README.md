@@ -41,6 +41,8 @@ Alternatively, you can change the relative file path in ``main.py``. You can do 
 
 ## Release History
 
+* 1.0.4
+   * FIX: Time zones are now added when converting Unix timestamps into datetimes for events.
 * 1.0.3
    * CHANGE: Raise an exception if the CSV file is not detected as being a valid Sleep as Android export.
 * 1.0.2
