@@ -128,11 +128,12 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-### Working files
+# MacOS
+.DS_Store
+
+# Development
 *.csv
 *.json
-
-### Personal Stuff
 archive/
 cpap/
 csv/
