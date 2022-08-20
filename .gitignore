@@ -132,8 +132,5 @@ dmypy.json
 *.csv
 *.json
 
-### Personal Stuff
-archive/
-cpap/
-csv/
-json/
+### MacOS
+.DS_Store
