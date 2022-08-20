@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 from datetime import datetime, timedelta
 from utils import globals
 
-globals.init()
+
 logger = logging.getLogger(__name__)
 
 def set_start_time():
@@ -15,10 +15,12 @@ def set_start_time():
     """
     starting = int(globals.pk)
     time_zone = str(globals.time_zone)
+    logger.debug('Setting start time for integer "%s" and time zone "%s"', starting, time_zone)
 
     datetime_value = datetime.fromtimestamp(starting/1000, ZoneInfo(time_zone))
 
     globals.start_time = datetime_value
+    logger.debug('Global start time set: %s', globals.start_time)
 
 
 def process_suffix(pk) -> str:
@@ -35,6 +37,7 @@ def process_suffix(pk) -> str:
         Year and month of the datetime, in format 'year-month'.
     """
     suffix = datetime.strftime(pk, '%Y-%m')
+    logger.debug('Converted pk "%s" into suffix "%s"', pk, suffix)
 
     return suffix
 
@@ -55,6 +58,7 @@ def process_pk(key: str) -> int:
         Original Unix timestamp in integer form.
     """
     globals.pk = key
+    logger.debug('Set primary key: %s', globals.pk)
 
     value = process_integer(key)
     return value
@@ -76,6 +80,7 @@ def process_tz(tz: str) -> str:
         The same time zone string.
     """
     globals.time_zone = tz
+    logger.debug('Set time zone: %s', globals.time_zone)
 
     set_start_time()
 
@@ -98,6 +103,7 @@ def process_dates(detail: str) -> str:
     """
     datetime_value = datetime.strptime(detail, '%d. %m. %Y %H:%M')
     datetime_string = datetime.strftime(datetime_value, '%Y-%m-%d %H:%M')
+    logger.debug('Converted detail "%s" to datetime "%s" to datetime string "%s"', detail, datetime_value, datetime_string)
 
     return datetime_string
 
@@ -116,6 +122,7 @@ def process_float(detail: str) -> float:
         String field converted into a float.
     """
     value = float(detail)
+    logger.debug('Converted detail "%s" to float "%s"', detail, value)
 
     return value
 
@@ -134,6 +141,7 @@ def process_integer(detail: str) -> int:
         String field converted into an integer.
     """
     value = int(detail)
+    logger.debug('Converted detail "%s" to integer "%s"', detail, value)
 
     return value
 
@@ -163,6 +171,8 @@ def process_actigraphy(time: str, value: str, start_time) -> dict:
     start_time_part = start_time.time()
     start_time_date = start_time.date()
     next_day_date = start_time_date + timedelta(days=1)
+    logger.debug('With time "%s" set to a time "%s", start time "%s" split into date "%s" and time "%s", and next day "%s"', 
+        time, act_time_part, start_time, start_time_date, start_time_part, next_day_date)
 
     # The date isn't included in the actigraphic header, so if the time
     # recorded is greater than the time that this sleep session started, we
@@ -174,12 +184,14 @@ def process_actigraphy(time: str, value: str, start_time) -> dict:
     if act_time_part > start_time_part:
         act_datetime = datetime.combine(start_time_date, act_time_part)
     else:
+        logger.debug('New day entry: %s', act_time_part)
         act_datetime = datetime.combine(next_day_date, act_time_part)
 
     act_dict = {
         'actigraphic_time': act_datetime.strftime('%Y-%m-%d %H:%M'),
         'actigraphic_value': value
     }
+    logger.debug('Built actigraphy entry: %s', act_dict)
 
     return act_dict
 
@@ -203,12 +215,14 @@ def process_event(event: str) -> dict:
     event_parts = event.split('-', 2)
 
     event_type = event_parts[0]
+    logger.debug('Split event "%s" into event parts "%s" and set the event type "%s"', event, event_parts, event_type)
 
     timestamp = datetime.fromtimestamp(
         int(event_parts[1])/1000, ZoneInfo(str(globals.time_zone)))
     # We want the event time in milliseconds, because the DHA event occurs every 1
     # millisecond until you fall asleep.
     event_time = timestamp.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+    logger.debug('Timestamp is "%s" and the event time with milliseconds is "%s"', timestamp, event_time)
 
     # Some events have a second hyphen if there is data to be included in it. Include
     # an event value if this is the case, otherwise set it to none and don't include
@@ -229,6 +243,7 @@ def process_event(event: str) -> dict:
             'event_time': event_time,
             'event_value': event_value
         }
+        logger.debug('Set event type with a value: %s', event_dict)
     else:
         event_value = None
 
@@ -236,6 +251,7 @@ def process_event(event: str) -> dict:
             'event_type': event_type,
             'event_time': event_time
         }
+        logger.debug('Set event type without a value: %s', event_dict)
 
     return event_dict
 
@@ -254,5 +270,6 @@ def process_array(records: list) -> str:
         The records now converted into a JSON string.
     """
     json_string = json.dumps(records)
+    logger.debug('Turned records into a JSON string: records [%s], JSON [%s]', records, json_string)
 
     return json_string

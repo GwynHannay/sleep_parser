@@ -3,10 +3,11 @@ import logging
 import os
 from utils import csv_parser as cps, globals
 
-globals.init()
 
+globals.init()
+logfile = ''.join(['log_', globals.get_current_datetime(), '.txt'])
 logging.basicConfig(
-    filename='log.txt',
+    filename=logfile,
     format='[%(asctime)s] - %(levelname)s in %(name)s, %(funcName)s(): %(message)s',
     level=logging.DEBUG
 )
@@ -34,7 +35,7 @@ def main(csv_file: str, json_dir: str):
     # Load CSV file.
     try:
         with open(csv_file, encoding='utf-8') as csvf:
-            logger.debug('Opened CSV file')
+            logger.warning('Opened CSV file')
             csv_reader = csv.reader(csvf)
 
             # Each row is either a header row, a values row, or a noise recording row.

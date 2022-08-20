@@ -98,3 +98,10 @@ def init():
             'type': 'array'
         }
     }
+    logger.debug('Globals initialised, and Sleep as Android fields are: %s', saa_fields)
+
+
+def get_current_datetime():
+    datetime_value = datetime.strftime(datetime.now(), '%Y-%m-%d')
+    return datetime_value
+    

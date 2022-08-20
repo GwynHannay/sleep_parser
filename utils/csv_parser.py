@@ -46,8 +46,10 @@ def combine_record(headers: list, row: list) -> dict:
     dict
         A dictionary where each header is matched with its value.
     """
+    logger.debug('Merging headers [%s] and row [%s]', headers, row)
     zip_it = zip(headers, row)
     record = dict(zip_it)
+    logger.debug('Merged record: %s', record)
 
     return record
 
