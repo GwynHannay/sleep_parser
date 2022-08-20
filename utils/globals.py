@@ -1,5 +1,8 @@
+import logging
 from datetime import datetime
 
+
+logger = logging.getLogger(__name__)
 
 def init():
     """Contains global variables.

@@ -1,10 +1,11 @@
+import logging
 import json
 from zoneinfo import ZoneInfo
 from datetime import datetime, timedelta
 from utils import globals
 
 globals.init()
-
+logger = logging.getLogger(__name__)
 
 def set_start_time():
     """Using the global variables 'pk' (Unix timestamp) and 'time_zone' from

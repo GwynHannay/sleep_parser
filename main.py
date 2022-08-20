@@ -5,6 +5,12 @@ from utils import csv_parser as cps, globals
 
 globals.init()
 
+logging.basicConfig(
+    filename='log.txt',
+    format='[%(asctime)s] - %(levelname)s in %(name)s, %(funcName)s(): %(message)s',
+    level=logging.DEBUG
+)
+
 logger = logging.getLogger('main')
 
 
@@ -22,11 +28,13 @@ def main(csv_file: str, json_dir: str):
 
     # Make sure the JSON directory exists before we start this whole process.
     if not os.path.isdir(json_dir):
+        logger.debug('Creating JSON directory')
         os.makedirs(json_dir)
 
     # Load CSV file.
     try:
         with open(csv_file, encoding='utf-8') as csvf:
+            logger.debug('Opened CSV file')
             csv_reader = csv.reader(csvf)
 
             # Each row is either a header row, a values row, or a noise recording row.
@@ -40,6 +48,7 @@ def main(csv_file: str, json_dir: str):
                     first_pass.append(cps.combine_record(
                         headers, row))
                 else:
+                    logger.debug('Skipping noise row, number %s', i)
                     assert i > 0, "First row does not start with 'Id' or a digit. It is: {}".format(
                         row[0])
 
@@ -51,6 +60,7 @@ def main(csv_file: str, json_dir: str):
         # month changes.
         suffix, previous_suffix = 'append', 'append'
         i, records = 0, len(first_pass)
+        logger.debug('File completed, number of records to process: %s', records)
 
         while suffix != 'done':
             for record in first_pass:
@@ -80,6 +90,7 @@ def main(csv_file: str, json_dir: str):
 
                 i = i + 1
                 if i > records:
+                    logger.debug('Marking as done')
                     suffix = 'done'
 
     except FileNotFoundError as fnf:

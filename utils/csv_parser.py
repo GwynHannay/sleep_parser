@@ -1,5 +1,8 @@
+import logging
 from utils import data_functions as df, globals
 
+
+logger = logging.getLogger(__name__)
 
 def csv_headers(headers: list) -> list:
     """Processes header rows in the CSV document.
